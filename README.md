@@ -1,1 +1,3 @@
-# awsome-project
+# My Awsome Project
+
+Ini isi proyek
