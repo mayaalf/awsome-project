@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const Book = require('./models/books');
 
 const app = express();
 constPORT = process.env.PORT || 3000;
@@ -16,12 +17,36 @@ const connectDB = async() => {
     }
 }
 app.get('/', (req, res) => {
-    res.send({
-        tittle: 'Books'
-    });
+    res.send({ title: 'Books' });
 });
+
+app.get('/add-note', async(req, res) => {
+    try {
+        await Book.insertMany([{
+            title: "Sons Of Anarchy",
+            body: "Body text goes here...",
+        }, {
+            title: "Game of Thrones",
+            body: "Body text goes here...",
+        }]);
+        res.send("Data added...");
+    } catch (error) {
+        console.log("err", +error);
+    }
+})
+
+app.get('/books', async(req, res) => {
+    const book = await Book.find();
+
+    if (book) {
+        res.json(book)
+    } else {
+        reS.send("Something went wrong.");
+    }
+})
+
 connectDB().then(() => {
     app.listen(PORT, () => {
         console.log('Listening on port ${PORT}');
-    });
+    })
 });
